@@ -9,12 +9,12 @@ The following diagram will give you an overview of the final architecture:
 
 ![Network Topology]({{ site.baseurl }}/images/2016-08-09-Master-Slave-Jenkins-With-Docker-Part1/network-topology.png "Network Topology")
 
-There are three hosts running coreos in this example. The advantage of using coreos is, that a lot of the needed stuffing
-to manage a distributed system is already included. On all hosts etcd is running as a distributed key-value store. This 
-directory allows the registration and discovery of services. The docker-swarm will use this facility. The docker-swarm agent 
-on each machine will register this docker host in etcd. The docker-swarm manager on the first host will query etcd for the
-currently registered hosts. The other responsiblity of the manager is to provide the docker API over the network to access
-the docker-swarm.
+There are three hosts running coreos in this example. The advantage of using coreos is, that a lot of the needed services
+to manage a distributed system are already included. On all hosts [etcd](https://coreos.com/etcd/) is running as a distributed 
+key-value store. This directory allows the registration and discovery of services. The docker-swarm will use this facility. 
+The docker-swarm agent on each machine will register this docker host in etcd. The docker-swarm manager on the first host 
+will query etcd for the currently registered hosts. The other responsiblity of the manager is to provide the docker API 
+over the network on port 3375 to access the docker-swarm.
 
 ### Prepare your dev machine
 
