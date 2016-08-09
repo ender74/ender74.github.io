@@ -2,8 +2,6 @@
 layout: post
 title:  Deploying a multi node Jenkins environment with docker and coreos - Part 1
 ---
-
-###Introduction
 In this post i will show you how to setup a multi node jenkins cluster running in a docker-swarm on coreos. In part 1 we
 will get a docker-swarm enabled cluster running. In part 2 we will use this docker-swarm to run jenkins.
 
@@ -18,7 +16,8 @@ on each machine will register this docker host in etcd. The docker-swarm manager
 currently registered hosts. The other responsiblity of the manager is to provide the docker API over the network to access
 the docker-swarm.
 
-###Prepare your dev machine
+### Prepare your dev machine
+
 For an production environment you would usually have a virtual infrastructure to provision your machines. For the sake 
 of simplicity i'm using local virtual machines with [Vagrant](https://www.vagrantup.com/) for this tutorial. Vagrant 
 supports the easy creation and configuration of virtual machines. The default VM software is 
@@ -75,7 +74,8 @@ To list the current configuration you can use `git config --global --list`. More
 
 Now is the right time to reboot your machine.
 
-###Setting up coreos cluster
+### Setting up coreos cluster
+
 ***TLDR;***
 If you just want a quick way to get an docker-swarm cluster use the following commands:
 
@@ -132,7 +132,8 @@ http://172.17.8.101:2379 isLeader=true
 You can check the availability of docker with `docker run hello-world`. This should result in an 'Hello from Docker!' screen.
 Now close the shell by typing `exit` and stop the virtual machines with `vagrant halt`. 
 
-###Installing docker-swarm in the cluster
+### Installing docker-swarm in the cluster
+
 Right now we have three distinct machines with a docker host running. We could connect to each machine to run docker commands.
 But to make our life easier, we can connect the three hosts to one swarm. The advantage of using 
 [docker-swarm](https://docs.docker.com/swarm/) is, that we can use this swarm like we would use a single host, e.g. 
@@ -197,7 +198,7 @@ querying the docker-swarm, which has no running containers yet. To check this, y
 Server Version: swarm/1.2.4 together with some other status information to prove, that your docker-swarm is running. 
 You can exit the ssh shell.
 
-###Installing Docker Toolbox on the dev machine
+### Installing Docker Toolbox on the dev machine
 
 Working with your docker-swarm would be more easy, if you could just use the usual docker commands on your development 
 machine. The [Docker Toolbox](https://www.docker.com/products/docker-toolbox) makes this possible for your Windows or 
