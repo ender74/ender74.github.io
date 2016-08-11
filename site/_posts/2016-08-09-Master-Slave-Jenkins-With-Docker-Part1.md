@@ -50,6 +50,10 @@ Vagrant needs a runtime to provision the machines. For this tutorial the runtime
 [VirtualBox download site](https://www.virtualbox.org/wiki/Downloads) and grab your copy of the current version. At the time 
 of this writing this will be version `5.1.2`. Using the checked default options for the installation is fine.
 
+*Important:* Modern CPUs support virtualization with special instructions, called VT-X for X86 based Intel CPUs. This 
+feature can only be used by one vm host at a time. If you have Hyper-V enabled, you need to [disable it](http://answers.microsoft.com/en-us/windows/forum/windows_8-windows_install/how-do-i-uninstall-hyper-v/7d268911-47cd-4c52-bfe5-ea41e58067ab).
+Unfortunately the Vagrantfile for coreos we are going to use doesn't support Hyper-V yet.
+
 3. **Git**
 
 The project files and templates are hosted on [Github](https://github.com/). To access them, we need to have an git client 
