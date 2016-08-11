@@ -202,6 +202,26 @@ querying the docker-swarm, which has no running containers yet. To check this, y
 Server Version: swarm/1.2.4 together with some other status information to prove, that your docker-swarm is running. 
 You can exit the ssh shell.
 
+### Overlay networks
+There is one final step missing. If you deploy multiple containers to your swarm which need to communicate with each 
+other, you have to provide a network for this. Docker supports different network types. For this scenario (containers 
+running on different docker hosts) we need an overlay network. To do so docker needs a key-value store to share 
+information about the participants of this network. At startup you need to give docker the address of this key-value store.
+Fortunately, the key-value store (etcd) is already running. So all we have to do is to extend the configuration of the
+docker service in the cloud config (user-data file) as follows:
+
+```
+- name: docker.service
+  drop-ins:
+    - name: 10-docker-swarm.conf
+      content: |
+        [Service]
+        Environment="DOCKER_OPTS=-H=0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-advertise eth1:2375 --cluster-store etcd://127.0.0.1:2379"
+```
+
+### Security
+Right now the access to our docker hosts is unsecured. Anyone with network access to the appropriate port can issue commands.
+
 ### Installing Docker Toolbox on the dev machine
 
 Working with your docker-swarm would be more easy, if you could just use the usual docker commands on your development 
