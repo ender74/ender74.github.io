@@ -7,7 +7,7 @@ will get a docker-swarm enabled cluster running. In part 2 we will use this dock
 
 The following diagram will give you an overview of the final architecture:
 
-![Network Topology]({{ site.baseurl }}/images/2016-08-09-Master-Slave-Jenkins-With-Docker-Part1/network-topology.png "Network Topology")
+![Network Topology]({{ site.baseurl }}/images/2016-08-09-Master-Slave-Jenkins-With-Docker-Part1/network-topology.png){: .img-responsive}
 
 There are three hosts running coreos in this example. The advantage of using coreos is, that a lot of the needed services
 to manage a distributed system are already included. On all hosts [etcd](https://coreos.com/etcd/) is running as a distributed 
