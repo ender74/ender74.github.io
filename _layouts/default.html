@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{ page.title }} - {{ site.title }}</title>
+    <title>{{ page.title }}</title>
 
     <link rel="stylesheet" type="text/css" href="{{ site.path }}/style.css">
 
@@ -13,7 +13,6 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">ender74.github.io</a>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
                     aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
@@ -21,11 +20,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">{{ site.title }}</a>
+            <a class="navbar-brand" href="{{ site.path }}/">{{ site.name }}</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ site.baseurl }}/">Home</a></li>
+                <li class="active"><a href="#">Start</a></li>
                 <li><a href="{{ site.baseurl }}/about">About</a></li>
             </ul>
         </div><!--/.nav-collapse -->
@@ -39,5 +38,14 @@
     </div>
 </div><!-- /.container -->
 
+<div class="wrapper-footer">
+    <div class="container">
+        <footer class="footer">
+            {% include svg-icons.html %}
+        </footer>
+    </div>
+</div>
+
+{% include analytics.html %}
 </body>
 </html>

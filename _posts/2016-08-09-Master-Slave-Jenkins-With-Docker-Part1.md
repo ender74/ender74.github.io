@@ -139,13 +139,14 @@ Now close the shell by typing `exit` and stop the virtual machines with `vagrant
 ### Installing docker-swarm in the cluster
 
 Right now we have three distinct machines with a docker host running. We could connect to each machine to run docker commands.
-But to make our life easier, we can connect the three hosts to one swarm. The advantage of using 
-[docker-swarm](https://docs.docker.com/swarm/) is, that we can use this swarm like we would use a single host, e.g. 
-with the same tools. 
+But to make our life easier, we can connect the three hosts to build one virtual docker host - a docker swarm. The advantage 
+of using [docker-swarm](https://docs.docker.com/swarm/) is, that we can use this swarm like we would use a single host, e.g. 
+with the same tools. If you run a container, docker-swarm selects one host from the swarm with enough free resources and 
+runs it there. The next container you start might happen to run on a other host of your swarm transparently.
 
 To do so, we need to make some changes to the configuration. So open the file Vagrantfile. The first sections takes care 
-of loading the config files. The configuration itself starts with the Vagrant.configure call in line 48. The set number 
-of instances is configurated for-each loop starting in line 78.
+of loading the config files. The configuration itself starts with the Vagrant.configure call at line 48. The set number 
+of instances is configured in the loop starting at line 78.
 
 We need to expose port 3375 on the first machine (our docker-swarm manager). To do so, add the following lines just before the end
 of the loop (line 145):
@@ -179,6 +180,52 @@ end
 # end of docker-swarm configuration		
 ```
 
+To start the docker containers we need to add the following new systemd Units to our cloud-config file user-data:
+
+```
+- name: enable-docker-tcp.service
+  command: start
+  enable: true
+  content: |
+    [Unit]
+    Description=Enable Docker Socket for the API
+
+    [Service]
+    ExecStartPre=/usr/bin/systemctl stop docker.socket
+    ExecStartPre=/usr/bin/systemctl stop docker-tcp.socket
+    ExecStartPre=/usr/bin/systemctl stop docker
+    ExecStart=/usr/bin/systemctl enable docker-tcp.socket
+    ExecStartPost=/usr/bin/systemctl start docker.socket
+    ExecStartPost=/usr/bin/systemctl start docker-tcp.socket
+    Type=oneshot
+    RemainAfterExit=true
+
+    [Install]
+    WantedBy=network.target
+```
+```    
+- name: start-docker-swarm.service
+  command: start
+  enable: true
+  content: |
+    [Unit]
+    Description=Start Containers for docker-swarm
+    After=enable-docker-tcp.service
+
+    [Service]
+    Restart=always
+    ExecStart=/usr/bin/docker start swarm-agent;/usr/bin/docker start swarm-manager;true
+    ExecStop=/usr/bin/docker stop -t 2 swarm-agent;/usr/bin/docker stop -t 2 swarm-manager;true
+
+    [Install]
+    WantedBy=default.target
+```
+The first one restarts the docker socket services. This is a hack, to prevent the problem that docker is sometimes not
+available over TCP/IP (see [this issue on github](https://github.com/coreos/bugs/issues/1374) for explanations). The second
+Unit does start the swarm-agent and swarm-manager containers. This seems to be needed because the ```--restart always```
+flag in the docker run command does not seem to work reliable right now. Maybe with newer versions both Units will be
+obsolete. But right now, this was my only solution to get it to work reliable.
+
 Now it's time to start our cluster again. To have our changes applied, we need to tell vagrant to provision the machines
 again. To do so, type `vagrant up --provision` into the console and connect to the first machine (`vagrant ssh core-01`).
 To see the running docker container type in `docker ps`. You should see two running containers (one for the docker-swarm agent 
@@ -190,17 +237,19 @@ core@core-01 ~ $ etcdctl ls /docker/swarm/nodes
 /docker/swarm/nodes/172.17.8.102:2375
 /docker/swarm/nodes/172.17.8.101:2375
 ```
-This should give you a list with one entry per node. To test the docker-swarm, you need to define an environment variable
-DOCKER_HOST within your vm shell as follows: 
-
+This should give you a list with one entry per node. To test the docker-swarm, you need to tell your docker client to
+connect to the docker host at port 3375. You can add the host parameter to all your docker calls like 
+```docker -H tcp://$COREOS_PUBLIC_IPV4:3375 info```. If you want to test more than one command, it is more easy to define 
+an environment variable ```DOCKER_HOST``` as follows:
+ 
 ```
 export DOCKER_HOST=$COREOS_PUBLIC_IPV4:3375
 ```
 
-When you now issue a `docker ps`, there should be no error message but no running containers too. The reason is, that you are
+When you now execute `docker ps`, there should be no error message but no running containers too. The reason is, that you are
 querying the docker-swarm, which has no running containers yet. To check this, you can use `docker info`.  This should show
-Server Version: swarm/1.2.4 together with some other status information to prove, that your docker-swarm is running. 
-You can exit the ssh shell.
+Server Version: swarm/1.2.4 together with some other status information to prove, that your docker-swarm is running. If you
+run ```docker run hello-world``` the hello-world container runs as usual, but within your swarm. You can exit the ssh shell.
 
 ### Overlay networks
 There is one final step missing. If you deploy multiple containers to your swarm which need to communicate with each 

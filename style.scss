@@ -4,6 +4,7 @@
 // add bootstrap variable settings here
 
 @import 'bootstrap';
+@import 'svg-icons';
 
 
 // add more css stuff here
@@ -16,3 +17,7 @@ body {
   padding: 40px 15px;
 }
 
+footer {
+  padding: 20px 0;
+  text-align: center;
+}
