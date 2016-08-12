@@ -216,7 +216,7 @@ docker service in the cloud config (user-data file) as follows:
     - name: 10-docker-swarm.conf
       content: |
         [Service]
-        Environment="DOCKER_OPTS=-H=0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-advertise eth1:2375 --cluster-store etcd://127.0.0.1:2379"
+        Environment="DOCKER_OPTS=--cluster-advertise eth1:2375 --cluster-store etcd://127.0.0.1:2379"
 ```
 
 ### Security
