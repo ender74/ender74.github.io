@@ -152,7 +152,7 @@ total 0
 
 Strange enough, this does work. The reason is, that when the busybox container is launched, docker-swarm will choose one of the available nodes to run it on. On this node, there is exactly one named volume data, so everything seems okay.
 
-Let's repeat our test to copy an file:
+Let's repeat our test to copy a file into the folder:
 
 ```
 $ docker run -i -t -v data:/my-shared-data busybox cp /etc/hostname /my-shared-data
@@ -168,7 +168,7 @@ $ docker run -i -t -v data:/my-shared-data busybox cat /my-shared-data/hostname
 
 Not nearly the behaviour I would expect. The fist copy command seems to be fine, but the ls command right afterwards finds no files in the folder. So consequently, the cat cannot find the file either. But executing the same cat again, does find it? According to Albert Einstein I would be mad to expect this behaviour, because I tried the exact same command twice and would expect different results.
 
-The reason lies of cause again within the swarm implementation and it's scheduler. The scheduler selects a node for every container to run it on. In my test, the cp command runs on core-02 and copies the file only there. The ls running on core-01 cannot find it. The first cat runs on core-03 and thus cannot find the file either. But the next cat runs on core-02 again, and now finds the file.
+The reason lies of cause within the swarm implementation and it's scheduler again. The scheduler selects a node for every container to run it on. In my test, the cp command runs on core-02 and copies the file only there. The ls running on core-01 cannot find it. The first cat runs on core-03 and thus cannot find the file either. But the next cat runs on core-02 again, and now finds the file.
 
 (When you run the test, different nodes might get chosen. But with the default spread scheduler, the effect should be similar and a new node be chosen for subsequent commands.)
 
