@@ -108,7 +108,7 @@ Total Memory: 3.067 GiB
 Name: core-01
 ```
 
-So we have a coreos based cluster with three nodes - core-01 to core-03. If you are interested in this setup, you can read about it here (Deploying a multi node Jenkins environment with docker and coreos - Part 1)[/Master-Slave-Jenkins-With-Docker-Part1/].
+So we have a coreos based cluster with three nodes - core-01 to core-03. If you are interested in this setup, you can read about it here [Deploying a multi node Jenkins environment with docker and coreos - Part 1](/Master-Slave-Jenkins-With-Docker-Part1/).
 
 Let's create a named volume and inspect it:
 
