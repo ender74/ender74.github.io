@@ -190,7 +190,7 @@ $ docker run -i -t -v data:/my-shared-data -e affinity:container==dataprov busyb
 Now everything runs as expected. But running all containers on one host defeats the purpose of using docker-swarm in the first place.
 
 ## Lessons Learned
-What did we learn from this? docker-swarm is no totally transparent replacement for a vanilla docker host. At least when using volumes, you need to be aware that you are running your containers on a cluster.
+What did we learn from this? docker-swarm is not a totally transparent replacement for a vanilla docker host. At least when using volumes, you need to be aware that you are running your containers on a cluster.
 
 The described problems occur, because I was using the default volume driver 'local'. As the name suggests, this driver is using more or less only a dumb, local directory. But starting with docker 1.9 there are other plugins available. See the [releasenotes](https://blog.docker.com/2015/11/docker-1-9-production-ready-swarm-multi-host-networking/) for details. By using a more sophisticated volume driver like [flocker](https://docs.clusterhq.com/en/latest/), I could get this probably running.
 
