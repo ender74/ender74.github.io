@@ -158,6 +158,7 @@ Insecure Registries:
 You may use curl from within the git bash to test the https connection:
 
 ```
+$ export HOST=172.17.8.101
 $ curl https://$HOST:2376/v1.24/info --insecure --cert ~/.docker/cert.pem --key ~/.docker/key.pem --cacert ~/.docker/ca.pem
 {"ID":"7PQT:XIE4:F76D:CYOS:JJJN:5LPL:K2BY:2SLC:HYIV:24WQ:YK7P:PBJD","Containers":0,"ContainersRunnin
 g":0,"ContainersPaused":0,"ContainersStopped":0, ... }
