@@ -5,6 +5,8 @@ title:  Sharing Volumes with docker-swarm 1.12
 
 After my initial tests with [Sharing Volumes with docker-swarm](/Sharing-Volumes-With-Docker-Swarm/) based on Docker 1.11 I still had some open issues. This docker-swarm was no transparent replacement for a plain Docker host. The main problem was sharing data between containers on different swarm nodes. Before going deeper and try to fix the issues, I want to try the new Docker 1.12.
 With this release comes a new implementation for docker-swarm, which is integrated into the Docker host. I assume, that you already have a development environment setup. Have a look here [Deploying a multi node Jenkins environment with docker and coreos - Part 1](/Master-Slave-Jenkins-With-Docker-Part1/) for an introduction. The main difference is, that we are going to use the current [Alpha Release Channel](https://coreos.com/releases/) of coreos (1153.0.0), which runs Docker 1.12.1.
+
+### Manual Setup
 To start, we grab a fresh copy of the [coreos Vagrant template](https://github.com/coreos/coreos-vagrant), rename the config samples and adjust num_instances to 3.
 Before trying to automate the swarm setup with Vagrant, we will try to do the necessary steps manual. For this we will follow the [3 Node Swarm Cluster in 30 seconds](http://www.johnzaccone.io/3-node-cluster-in-30-seconds/) blog entry from John Zaccone.
 So start your cluster (```Vagrant up```) and connect to the first box (```Vagrant ssh core-01```). This machine is going to be the swarm master. We need to init the swarm on this machine:
@@ -109,4 +111,34 @@ We can now use the inspect command, to query the hostname for each container:
     ...
 },
 ...
+```
+
+### Automation with Vagrantfile
+I do not want to manually initialize my swarm, each time i provision my machines. Therefore we need to extend the Vagrantfile to create a swarm for us.
+
+The first part (docker swarm init) is not a great problem. We just need to tell Vagrant, to run this as an inline script for the first instance by adding:
+
+```
+if (i == 1)
+  config.vm.provision :shell, :inline => "docker swarm init --advertise-addr 172.17.8.101:2377", :privileged => true
+end  
+```
+
+The docker swarm join is more of a problem. The reason is, that swarm join expects an token, which is unique for each swarm and is created, when the swarm is initialized. There doesn't seem to be any argument to pass a static token to swarm init. So how do we know, which token was created?
+
+
+```
+docker swarm join \
+--token $(curl -s https://172.17.8.101:2376/v1.24/swarm --insecure --cert /etc/docker/server-cert.pem --key /etc/docker/server-key.pem --cacert /etc/docker/ca.pem  | jq -r '.JoinTokens.Worker') \
+172.17.8.101:2377
+```
+
+with this command, we can extend the swarm init in the Vagrantfile with an else branch for nodes > 1 as follows:
+
+```
+if (i == 1)
+  config.vm.provision :shell, :inline => "docker swarm init --advertise-addr 172.17.8.101:2377", :privileged => true
+else
+  config.vm.provision :shell, :inline => "docker swarm join --token $(curl -s https://172.17.8.101:2376/v1.24/swarm --insecure --cert /etc/docker/server-cert.pem --key /etc/docker/server-key.pem --cacert /etc/docker/ca.pem  | jq -r '.JoinTokens.Worker') 172.17.8.101:2377", :privileged => true
+end  
 ```

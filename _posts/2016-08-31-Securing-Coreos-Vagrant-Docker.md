@@ -90,23 +90,9 @@ else
 end
 ```
 
-This copies all files to /etc/docker/. The next step is to tell the docker daemon to use those files. You need to add the following block at the end of your user-data file:
+This copies all files to /etc/docker/. The next step is to tell the docker daemon to use those files. To do so, modify your user-data file. You need to change the port for the docker-tcp.socket from 2375 to 2376. Then add the following block at the end of the file:
 
 ```
-- name: docker-tcp-tls.socket
-  command: start
-  enable: true
-  content: |
-    [Unit]
-    Description=Docker Secured Socket for the API
-
-    [Socket]
-    ListenStream=2376
-    Service=docker.service
-    BindIPv6Only=both
-
-    [Install]
-    WantedBy=sockets.target
 - name: docker.service
   drop-ins:
   - name: 10-docker-swarm.conf
@@ -115,7 +101,7 @@ This copies all files to /etc/docker/. The next step is to tell the docker daemo
       Environment="DOCKER_OPTS=--tlsverify --tlscacert=/etc/docker/ca.pem --tlscert=/etc/docker/server-cert.pem --tlskey=/etc/docker/server-key.pem"
 ```
 
-This defines a new secured Socket 2376 for your docker service. The following drop-in sets the needed Docker Options for TLS authentication / verification. Voilà, that's it. Start your cluster with ```vagrant up```. When the cluster is started, run some tests:
+This defines a secured Docker Daemon on Port 2376. The drop-in sets the needed Docker Options for TLS authentication / verification. Voilà, that's it. Start your cluster with ```vagrant up```. When the cluster is started, run some tests:
 
 ```
 > set DOCKER_HOST=172.17.8.101:2376
