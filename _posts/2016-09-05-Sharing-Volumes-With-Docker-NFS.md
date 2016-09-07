@@ -55,7 +55,7 @@ world
 Everything seems to be okay, so let's move on and store our docker volumes there.
 
 ### Share your data with NFS
-Since version 1.8 Docker does support Volume Driver Plugins. Such a Plugin can extend Docker with new volume drivers. For our purpose, we need a Plugin which supports Volumes on NFS shares. There are different plugins available. I chose to try [Netshare by Containx](https://github.com/ContainX/docker-volume-netshare). Let's first try it manually. Connect to your host core-02 (```vagrant ssh core-02```) and run the following commands:
+Since version 1.8 Docker does support Volume Driver Plugins. Such a Plugin can extend Docker with new volume drivers. For our purpose, we need a Plugin which supports Volumes on NFS shares. There are different plugins available. My decision was to use [Netshare by Containx](https://github.com/ContainX/docker-volume-netshare). Let's first try it manually. Connect to your host core-02 (```vagrant ssh core-02```) and run the following commands:
 
 ```
 $ wget https://github.com/ContainX/docker-volume-netshare/releases/download/v0.18/docker-volume-netshare_0.18_linux_amd64-bin
