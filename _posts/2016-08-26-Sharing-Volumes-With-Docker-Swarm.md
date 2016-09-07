@@ -3,7 +3,7 @@ layout: post
 title:  Sharing Volumes with docker-swarm
 ---
 
-Please be aware, that I run the following tests with coreos and docker 1.11. This means, I am using the old docker-swarm as a container. Probably the newly integrated swarm solution for docker 1.12 works different and hopefully better.
+I run the following tests with coreos and Docker 1.11. I am using the docker-swarm as a container (not the in Docker 1.12 integrated swarm mode). But theses tests can be run with Docker 1.12 too.
 
 While trying to get [Jenkins](https://jenkins.io/) to run in a docker-swarm installation
 I had some problems to share volumes between containers. Usually, you can just define a
