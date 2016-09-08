@@ -6,6 +6,8 @@ title:  Sharing Volumes in Docker with NFS
 After my initial tests with [Sharing Volumes with docker-swarm](/Sharing-Volumes-With-Docker-Swarm/) based on Docker 1.11 I still had some open issues. This docker-swarm was no transparent replacement for a plain Docker host. The main problem was sharing data between containers on different swarm nodes. Some quick tests with the integrated swarm mode for Docker 1.12 showed, that this new mode takes an different approach than the docker-swarm containers before. You need to create special services to utilize it. It doesn't seem to solve the problem with sharing volumes between hosts though.
 So I decided to try the most obvious solution next. Docker has no problem with networking. You can create networks to connect multiple containers. So it is possible to use a network file system like NFS to share data between containers.
 
+<!-- more -->
+
 ### Running an NFS server
 If you already have an NFS server, you may skip this part. For production it's probably best to use an external NFS service like Amazons EFS. But for some tests, it's easier to start an NFS service as Docker image. For this we will be using the Docker image [cpuguy83/nfs-server ](https://github.com/cpuguy83/docker-nfs-server). First let's create an Docker compose file with the following content:
 

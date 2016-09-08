@@ -3,13 +3,17 @@ layout: post
 title:  Sharing Volumes with docker-swarm
 ---
 
-I run the following tests with coreos and Docker 1.11. I am using the docker-swarm as a container (not the in Docker 1.12 integrated swarm mode). But theses tests can be run with Docker 1.12 too.
-
 While trying to get [Jenkins](https://jenkins.io/) to run in a docker-swarm installation
 I had some problems to share volumes between containers. Usually, you can just define a
 data-only container and import volumes from this into other containers. Starting with
 docker 1.9 you do not even need to create a data-only container, but can just use named
-volumes. With a plain docker daemon, this goes as follows:
+volumes.
+
+<!-- more -->
+
+I run the following tests with coreos and Docker 1.11. I am using the docker-swarm as a container (not the in Docker 1.12 integrated swarm mode). But theses tests can be run with Docker 1.12 too.
+
+With a plain docker daemon, creating named volumes goes as follows:
 
 ```docker volume create --name data```
 

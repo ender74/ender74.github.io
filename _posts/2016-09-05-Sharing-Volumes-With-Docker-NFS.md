@@ -5,6 +5,8 @@ title:  Sharing Volumes in Docker Swarm with NFS
 
 After my initial tests with [Sharing Volumes with docker-swarm](/Sharing-Volumes-With-Docker-Swarm/) based on Docker 1.11 I still had some open issues. This docker-swarm was no transparent replacement for a plain Docker host. The main problem was sharing data between containers on different swarm nodes. Some quick tests with the integrated swarm mode for Docker 1.12 showed, that this new mode takes an different approach than the docker-swarm containers before. You need to create special services to utilize it. It doesn't seem to solve the problem with sharing volumes between hosts though and does not work with docker-compose yet.
 
+<!-- more --> 
+
 ![Teaser](/images/2016-09-05-Sharing-Volumes-With-Docker-NFS/teaser.jpg "Teaser"){: .img-responsive style="width: 100%" }
 
 So I decided to try a more straightforward solution next. Docker has no problem with networking. You can create networks to connect multiple containers. So it is surely possible to use a network file system like NFS to share data between containers.

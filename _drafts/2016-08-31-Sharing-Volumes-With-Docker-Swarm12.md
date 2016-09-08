@@ -6,6 +6,8 @@ title:  Sharing Volumes with docker-swarm 1.12
 After my initial tests with [Sharing Volumes with docker-swarm](/Sharing-Volumes-With-Docker-Swarm/) based on Docker 1.11 I still had some open issues. This docker-swarm was no transparent replacement for a plain Docker host. The main problem was sharing data between containers on different swarm nodes. Before going deeper and try to fix the issues, I want to try the new Docker 1.12.
 With this release comes a new implementation for docker-swarm, which is integrated into the Docker host. I assume, that you already have a development environment setup. Have a look here [Deploying a multi node Jenkins environment with docker and coreos - Part 1](/Master-Slave-Jenkins-With-Docker-Part1/) for an introduction. The main difference is, that we are going to use the current [Alpha Release Channel](https://coreos.com/releases/) of coreos (1153.0.0), which runs Docker 1.12.1.
 
+<!-- more -->
+
 ### Manual Setup
 To start, we grab a fresh copy of the [coreos Vagrant template](https://github.com/coreos/coreos-vagrant), rename the config samples and adjust num_instances to 3.
 Before trying to automate the swarm setup with Vagrant, we will try to do the necessary steps manual. For this we will follow the [3 Node Swarm Cluster in 30 seconds](http://www.johnzaccone.io/3-node-cluster-in-30-seconds/) blog entry from John Zaccone.

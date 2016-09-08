@@ -16,7 +16,8 @@ title:  My Developer Blog
         <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
         <div class="entry">
-            {{ post.excerpt }}
+<!--            {{ post.excerpt }} -->
+          {{ post.content | split:"<!-- more -->" | first }}
         </div>
 
         <a href="{{ site.baseurl }}{{ post.url }}" class="btn btn-primary btn-sm">Read More</a>
