@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Deploying a multi node Jenkins environment with docker and coreos - Part 2
+title:  Deploying a multi node Jenkins 2.0 environment with Docker and CoreOS - Part 2
 ---
 
 In the [first part of this series](/Master-Slave-Jenkins-With-Docker-Part1) we got a Docker Swarm

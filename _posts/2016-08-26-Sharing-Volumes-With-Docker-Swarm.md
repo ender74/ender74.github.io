@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Sharing Volumes with docker-swarm
+title:  Sharing Volumes with Docker Swarm
 ---
 
 While trying to get [Jenkins](https://jenkins.io/) to run in a docker-swarm installation

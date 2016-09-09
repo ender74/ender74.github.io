@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  Deploying a multi node Jenkins environment with docker and coreos - Part 1
+title:  Deploying a multi node Jenkins 2.0 environment with Docker and CoreOS - Part 1
 ---
 In this post i will show you how to setup a multi node jenkins cluster running in a docker-swarm on coreos. In part 1 we
 will get a docker-swarm enabled cluster running. In part 2 we will use this docker-swarm to run jenkins.
 
-<!-- more --> 
+<!-- more -->
 
 The following diagram will give you an overview of the final architecture:
 

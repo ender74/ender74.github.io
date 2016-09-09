@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  Securing the Docker for coreos Vagrantfile template
+title:  Securing the Docker for CoreOS Vagrantfile template
 ---
 The [coreos-vagrant](https://github.com/coreos/coreos-vagrant) Template is a minimal template to get a coreos cluster with Docker running. Docker is exposed via tcp/2375. This is an unsecured http connection. That is fine for trusted test environments. But for production systems and untrusted environments, it is necessary to secure this connection via transport layer security ([TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security)). Docker supports TLS out of the box. We just need to create keys and change the configuration.
 
-<!-- more --> 
+<!-- more -->
 
 I assume, that you have an development machine with the following components installed:
 
